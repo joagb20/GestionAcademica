@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Clase</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/admin/dashboard}">Gestión Académica</a>
+        <div class="ms-auto">
+            <a class="nav-link text-danger fw-semibold" th:href="@{/logout}">Cerrar Sesión</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <h3>Operaciones</h3>
+            <a th:href="@{/admin/dashboard}">Resumen institucional</a>
+            <a th:href="@{/admin/registrar-profesor}">Agregar profesor</a>
+            <a class="active" th:href="@{/admin/crear-curso}">Añadir clase</a>
+            <a th:href="@{/admin/asignar-estudiantes}">Asignar alumnos</a>
+        </aside>
+
+        <main class="dashboard-main">
+            <div class="dashboard-topbar">
+                <div>
+                    <h1>Crear una clase</h1>
+                    <p class="text-muted mb-0">Define la materia, el código y la estructura de evaluación para la universidad.</p>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <form th:action="@{/admin/crear-curso}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre de la clase</label>
+                        <input type="text" class="form-control" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Código</label>
+                        <input type="text" class="form-control" name="codigo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-control" name="descripcion" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Estructura de evaluación</label>
+                        <input type="text" class="form-control" name="estructuraEvaluacion" value="Participación 20%, Parcial 30%, Final 50%" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Docente responsable</label>
+                        <select class="form-select" name="profesorId">
+                            <option th:each="profesor : ${profesores}" th:value="${profesor.id}" th:text="${profesor.nombre + ' · ' + profesor.clase}"></option>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a th:href="@{/admin/dashboard}" class="btn btn-outline-secondary">Volver</a>
+                        <button type="submit" class="btn btn-primary">Crear clase</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>

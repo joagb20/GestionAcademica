@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel del Profesor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/profesor/dashboard}">Gestión Académica</a>
+        <div class="ms-auto">
+            <a class="nav-link text-danger fw-semibold" th:href="@{/logout}">Cerrar Sesión</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <h3>Docente</h3>
+            <a class="active" th:href="@{/profesor/dashboard}">Mi panel</a>
+            <a th:href="@{/profesor/reportes}">Reportes</a>
+        </aside>
+
+        <main class="dashboard-main">
+            <div class="dashboard-topbar">
+                <div>
+                    <h1 th:text="'Bienvenido, ' + ${profesor.nombre}">Bienvenido</h1>
+                    <p class="text-muted mb-0">Tu rol es revisar el seguimiento académico; no hay acciones de gestión disponibles para modificar notas.</p>
+                </div>
+            </div>
+
+            <div class="dashboard-card mb-4">
+                <h3>Clases asignadas</h3>
+                <div th:if="${#lists.isEmpty(cursos)}" class="text-muted">Todavía no se han asignado clases a este docente.</div>
+                <ul class="list-group list-group-flush" th:unless="${#lists.isEmpty(cursos)}">
+                    <li class="list-group-item" th:each="curso : ${cursos}">
+                        <strong th:text="${curso.nombre}">Clase</strong>
+                        <span class="text-muted" th:text="' · ' + ${curso.estructuraEvaluacion}"></span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Estudiantes del curso</h3>
+                <div th:if="${#lists.isEmpty(estudiantes)}" class="text-muted">La universidad aún no ha asignado estudiantes a tus clases.</div>
+                <div class="table-responsive" th:unless="${#lists.isEmpty(estudiantes)}">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Estudiante</th>
+                            <th>Matrícula</th>
+                            <th>Promedio</th>
+                            <th>Estado</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="estudiante : ${estudiantes}">
+                            <td th:text="${estudiante.nombre}">Estudiante</td>
+                            <td th:text="${estudiante.codigoMatricula}">Matrícula</td>
+                            <td th:text="${promedios[estudiante.id] != null ? #numbers.formatDecimal(promedios[estudiante.id], 1, 2) : 'Sin notas'}">0.00</td>
+                            <td>
+                                <span class="badge bg-success" th:if="${promedios[estudiante.id] != null and promedios[estudiante.id] >= 12}">Aprobado</span>
+                                <span class="badge bg-warning text-dark" th:if="${promedios[estudiante.id] == null}">Sin notas</span>
+                                <span class="badge bg-danger" th:if="${promedios[estudiante.id] != null and promedios[estudiante.id] < 12}">En revisión</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>
