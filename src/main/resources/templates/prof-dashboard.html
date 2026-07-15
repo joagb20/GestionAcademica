@@ -21,6 +21,7 @@
         <aside class="dashboard-sidebar">
             <h3>Docente</h3>
             <a class="active" th:href="@{/profesor/dashboard}">Mi panel</a>
+            <a th:href="@{/profesor/registrar-notas}">Registrar notas</a>
             <a th:href="@{/profesor/reportes}">Reportes</a>
         </aside>
 
@@ -28,12 +29,12 @@
             <div class="dashboard-topbar">
                 <div>
                     <h1 th:text="'Bienvenido, ' + ${profesor.nombre}">Bienvenido</h1>
-                    <p class="text-muted mb-0">Tu rol es revisar el seguimiento académico; no hay acciones de gestión disponibles para modificar notas.</p>
+                    <p class="text-muted mb-0">Tu rol es registrar calificaciones y revisar el seguimiento académico de tus estudiantes.</p>
                 </div>
             </div>
 
             <div class="dashboard-card mb-4">
-                <h3>Clases asignadas</h3>
+                <h3>Clases</h3>
                 <div th:if="${#lists.isEmpty(cursos)}" class="text-muted">Todavía no se han asignado clases a este docente.</div>
                 <ul class="list-group list-group-flush" th:unless="${#lists.isEmpty(cursos)}">
                     <li class="list-group-item" th:each="curso : ${cursos}">
@@ -44,29 +45,38 @@
             </div>
 
             <div class="dashboard-card">
-                <h3>Estudiantes del curso</h3>
-                <div th:if="${#lists.isEmpty(estudiantes)}" class="text-muted">La universidad aún no ha asignado estudiantes a tus clases.</div>
-                <div class="table-responsive" th:unless="${#lists.isEmpty(estudiantes)}">
+                <h3>Alumnos asignados</h3>
+                <div th:if="${#lists.isEmpty(cursos)}" class="text-muted">No hay alumnos asignados porque no hay clases.</div>
+                <div class="table-responsive" th:unless="${#lists.isEmpty(cursos)}">
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                         <tr>
+                            <th>Clase</th>
                             <th>Estudiante</th>
                             <th>Matrícula</th>
-                            <th>Promedio</th>
-                            <th>Estado</th>
+                            <th>Nota 1</th>
+                            <th>Nota 2</th>
+                            <th>Nota 3</th>
+                            <th>Nota 4</th>
+                            <th>Nota 5</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="estudiante : ${estudiantes}">
-                            <td th:text="${estudiante.nombre}">Estudiante</td>
-                            <td th:text="${estudiante.codigoMatricula}">Matrícula</td>
-                            <td th:text="${promedios[estudiante.id] != null ? #numbers.formatDecimal(promedios[estudiante.id], 1, 2) : 'Sin notas'}">0.00</td>
-                            <td>
-                                <span class="badge bg-success" th:if="${promedios[estudiante.id] != null and promedios[estudiante.id] >= 12}">Aprobado</span>
-                                <span class="badge bg-warning text-dark" th:if="${promedios[estudiante.id] == null}">Sin notas</span>
-                                <span class="badge bg-danger" th:if="${promedios[estudiante.id] != null and promedios[estudiante.id] < 12}">En revisión</span>
-                            </td>
-                        </tr>
+                        <th:block th:each="curso : ${cursos}">
+                            <tr>
+                                <th colspan="8" class="table-secondary" th:text="${curso.nombre}"></th>
+                            </tr>
+                            <tr th:each="estudiante : ${curso.estudiantes}">
+                                <td th:text="${curso.nombre}"></td>
+                                <td th:text="${estudiante.nombre}">Estudiante</td>
+                                <td th:text="${estudiante.codigoMatricula}">Matrícula</td>
+                                <td th:text="${notasPorCursoEstudiante[curso.id][estudiante.id]['Nota 1'] != null ? (notasPorCursoEstudiante[curso.id][estudiante.id]['Nota 1'] == -1 ? 'Ns' : notasPorCursoEstudiante[curso.id][estudiante.id]['Nota 1']) : ''}"></td>
+                                <td th:text="${notasPorCursoEstudiante[curso.id][estudiante.id]['Nota 2'] != null ? (notasPorCursoEstudiante[curso.id][estudiante.id]['Nota 2'] == -1 ? 'Ns' : notasPorCursoEstudiante[curso.id][estudiante.id]['Nota 2']) : ''}"></td>
+                                <td th:text="${notasPorCursoEstudiante[curso.id][estudiante.id]['Nota 3'] != null ? (notasPorCursoEstudiante[curso.id][estudiante.id]['Nota 3'] == -1 ? 'Ns' : notasPorCursoEstudiante[curso.id][estudiante.id]['Nota 3']) : ''}"></td>
+                                <td th:text="${notasPorCursoEstudiante[curso.id][estudiante.id]['Nota 4'] != null ? (notasPorCursoEstudiante[curso.id][estudiante.id]['Nota 4'] == -1 ? 'Ns' : notasPorCursoEstudiante[curso.id][estudiante.id]['Nota 4']) : ''}"></td>
+                                <td th:text="${notasPorCursoEstudiante[curso.id][estudiante.id]['Nota 5'] != null ? (notasPorCursoEstudiante[curso.id][estudiante.id]['Nota 5'] == -1 ? 'Ns' : notasPorCursoEstudiante[curso.id][estudiante.id]['Nota 5']) : ''}"></td>
+                            </tr>
+                        </th:block>
                         </tbody>
                     </table>
                 </div>

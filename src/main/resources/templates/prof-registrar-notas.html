@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Notas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
+    <div class="container">
+        <a class="navbar-brand fw-bold" th:href="@{/profesor/dashboard}">Gestión Académica</a>
+        <div class="ms-auto">
+            <a class="nav-link text-danger fw-semibold" th:href="@{/logout}">Cerrar Sesión</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container py-4">
+    <div th:if="${mensajeExito}" class="alert alert-success shadow-sm" role="alert">
+        <strong>¡Listo!</strong> <span th:text="${mensajeExito}"></span>
+    </div>
+
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <h3>Docente</h3>
+            <a th:href="@{/profesor/dashboard}">Mi panel</a>
+            <a class="active" th:href="@{/profesor/registrar-notas}">Registrar notas</a>
+            <a th:href="@{/profesor/reportes}">Reportes</a>
+        </aside>
+
+        <main class="dashboard-main">
+            <div class="dashboard-topbar">
+                <div>
+                    <h1>Registrar calificaciones</h1>
+                    <p class="text-muted mb-0">Asigna las notas a tus estudiantes por tipo de evaluación.</p>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div th:if="${mensajeError}" class="alert alert-danger shadow-sm" role="alert">
+                    <strong>Error:</strong> <span th:text="${mensajeError}"></span>
+                </div>
+                <form th:action="@{/profesor/registrar-nota}" method="post" class="row g-3" onsubmit="return validarFormulario()">
+                    <div class="col-md-6">
+                        <label for="cursoId" class="form-label">Clase</label>
+                        <select class="form-select" id="cursoId" name="cursoId" required>
+                            <option selected disabled value="">Selecciona una clase</option>
+                            <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nombre}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="tipoEvaluacion" class="form-label">Tipo de evaluación</label>
+                        <select class="form-select" id="tipoEvaluacion" name="tipoEvaluacion" required>
+                            <option selected disabled value="">Selecciona el tipo</option>
+                            <option value="Nota 1">Nota 1</option>
+                            <option value="Nota 2">Nota 2</option>
+                            <option value="Nota 3">Nota 3</option>
+                            <option value="Nota 4">Nota 4</option>
+                            <option value="Nota 5">Nota 5</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="valor" class="form-label">Calificación (0-20)</label>
+                        <input type="number" class="form-control" id="valor" name="valor" min="0" max="20" step="0.1">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">No se presentó</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="nsCheck" onclick="toggleNs()">
+                            <label class="form-check-label" for="nsCheck">Marcar como Ns</label>
+                        </div>
+                        <input type="hidden" id="ns" name="ns" value="false">
+                    </div>
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between">
+                            <a th:href="@{/profesor/dashboard}" class="btn btn-outline-secondary">Volver</a>
+                            <button type="submit" class="btn btn-primary">Guardar nota para todos</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="dashboard-card mt-4" th:if="${not #lists.isEmpty(estudiantes)}">
+                <h3>Estudiantes en tus clases</h3>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Estudiante</th>
+                            <th>Matrícula</th>
+                            <th>Nota 1</th>
+                            <th>Nota 2</th>
+                            <th>Nota 3</th>
+                            <th>Nota 4</th>
+                            <th>Nota 5</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="est : ${estudiantes}">
+                            <td th:text="${est.nombre}">Estudiante</td>
+                            <td th:text="${est.codigoMatricula}">Matrícula</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script>
+    function toggleNs() {
+        var check = document.getElementById('nsCheck');
+        var valor = document.getElementById('valor');
+        var hiddenNs = document.getElementById('ns');
+        if (check.checked) {
+            valor.disabled = true;
+            valor.value = '';
+            hiddenNs.value = 'true';
+        } else {
+            valor.disabled = false;
+            hiddenNs.value = 'false';
+        }
+    }
+
+    function validarFormulario() {
+        var check = document.getElementById('nsCheck');
+        var valor = document.getElementById('valor');
+        if (!check.checked && (!valor.value || valor.value.trim() === '')) {
+            alert('Ingresa una calificación o marca Ns.');
+            return false;
+        }
+        return true;
+    }
+</script>
+</body>
+</html>

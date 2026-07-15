@@ -7,6 +7,7 @@ import com.example.gestion_academica.model.Profesor;
 import com.example.gestion_academica.model.Usuario;
 import com.example.gestion_academica.repository.CursoRepository;
 import com.example.gestion_academica.repository.EstudianteRepository;
+import com.example.gestion_academica.repository.NotaRepository;
 import com.example.gestion_academica.repository.ProfesorRepository;
 import com.example.gestion_academica.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +30,7 @@ public class GestorAcademicoService {
     private final ProfesorRepository profesorRepository;
     private final UsuarioRepository usuarioRepository;
     private final CursoRepository cursoRepository;
+    private final NotaRepository notaRepository;
 
     /**
      * USO DE: map() y reduce()[cite: 1]
@@ -42,6 +46,7 @@ public class GestorAcademicoService {
 
             Double suma = notas.stream()
                     .map(Nota::getValor)
+                    .map(valor -> valor == null || valor < 0 ? 0.0 : valor)
                     .reduce(0.0, Double::sum);
 
             return suma / notas.size();
@@ -159,7 +164,32 @@ public class GestorAcademicoService {
         return listarCursosPorProfesor(profesorId).stream()
                 .flatMap(curso -> listarEstudiantesPorCurso(curso.getId()).stream())
                 .distinct()
+                .sorted(Comparator.comparing(this::obtenerApellido).thenComparing(Estudiante::getNombre))
                 .toList();
+    }
+
+    public List<Nota> listarNotasPorCurso(Long cursoId) {
+        return notaRepository.findByCursoId(cursoId);
+    }
+
+    @Transactional
+    public void registrarNotasParaCurso(Long cursoId, Double valor, String tipoEvaluacion) {
+        Curso curso = cursoRepository.findById(cursoId)
+                .orElseThrow(() -> new IllegalArgumentException("Curso no encontrado"));
+
+        if (curso.getEstudiantes() == null || curso.getEstudiantes().isEmpty()) {
+            return;
+        }
+
+        for (Estudiante estudiante : curso.getEstudiantes()) {
+            Nota nota = notaRepository.findFirstByEstudianteIdAndCursoIdAndTipoEvaluacion(estudiante.getId(), cursoId, tipoEvaluacion)
+                    .orElseGet(Nota::new);
+            nota.setEstudiante(estudiante);
+            nota.setCurso(curso);
+            nota.setTipoEvaluacion(tipoEvaluacion);
+            nota.setValor(valor);
+            notaRepository.save(nota);
+        }
     }
 
     public Profesor obtenerProfesorPorCorreo(String correo) {
@@ -181,6 +211,25 @@ public class GestorAcademicoService {
         return correo;
     }
 
+    @Transactional
+    public Nota registrarNota(Long estudianteId, Long cursoId, Double valor, String tipoEvaluacion) {
+        Estudiante estudiante = estudianteRepository.findById(estudianteId)
+                .orElseThrow(() -> new IllegalArgumentException("Estudiante no encontrado"));
+        Curso curso = cursoRepository.findById(cursoId)
+                .orElseThrow(() -> new IllegalArgumentException("Curso no encontrado"));
+
+        Nota nota = new Nota();
+        nota.setEstudiante(estudiante);
+        nota.setCurso(curso);
+        nota.setValor(valor);
+        nota.setTipoEvaluacion(tipoEvaluacion);
+        return notaRepository.save(nota);
+    }
+
+    public List<Nota> listarNotasPorEstudiante(Long estudianteId) {
+        return notaRepository.findByEstudianteId(estudianteId);
+    }
+
     public Usuario autenticarUsuario(String correo, String password) {
         Usuario usuario = usuarioRepository.findByCorreo(correo);
         if (usuario == null) {
@@ -192,5 +241,13 @@ public class GestorAcademicoService {
         }
 
         return null;
+    }
+
+    private String obtenerApellido(Estudiante estudiante) {
+        if (estudiante == null || estudiante.getNombre() == null) {
+            return "";
+        }
+        String[] partes = estudiante.getNombre().trim().split("\\s+");
+        return partes.length == 0 ? "" : partes[partes.length - 1].toLowerCase();
     }
 }
