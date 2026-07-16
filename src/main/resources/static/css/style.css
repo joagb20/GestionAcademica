@@ -1,3 +1,8 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, #f4f7fb 0%, #eef4ff 100%);
@@ -19,7 +24,7 @@ body {
 .brand-badge {
     width: 56px;
     height: 56px;
-    margin: 0 auto;
+    margin: 0;
     display: grid;
     place-items: center;
     border-radius: 50%;
@@ -64,7 +69,6 @@ body {
 .dashboard-sidebar {
     background: #0f172a;
     color: white;
-    border-radius: 1.25rem;
     padding: 1.5rem;
     min-height: 420px;
 }

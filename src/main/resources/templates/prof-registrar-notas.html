@@ -3,53 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <title>Registrar Notas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/parteProfesor.css}">
+    <link rel="stylesheet" th:href="@{/css/registro.css}">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
-    <div class="container">
-        <a class="navbar-brand fw-bold" th:href="@{/profesor/dashboard}">Gestión Académica</a>
-        <div class="ms-auto">
-            <a class="nav-link text-danger fw-semibold" th:href="@{/logout}">Cerrar Sesión</a>
+
+<!-- ===== NAVBAR SUPERIOR ===== -->
+<nav class="navbar-top">
+    <div class="navbar-top-inner">
+        <a class="navbar-brand-new" th:href="@{/profesor/dashboard}">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2 2 7l10 5 10-5-10-5z"></path>
+                <path d="M2 17l10 5 10-5"></path>
+                <path d="M2 12l10 5 10-5"></path>
+            </svg>
+            <span>Gestión Académica</span>
+        </a>
+        <div class="navbar-top-actions">
+            <div class="dropdown-wrapper">
+                <button class="bell-btn" type="button" aria-label="Notificaciones" onclick="toggleDropdown('notif-menu', event)">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                    </svg>
+                </button>
+                <div id="notif-menu" class="dropdown-menu-panel">
+                    <div class="dropdown-menu-empty">No tienes notificaciones nuevas.</div>
+                </div>
+            </div>
+            <div class="dropdown-wrapper">
+                <button class="navbar-user" type="button" onclick="toggleDropdown('user-menu', event)">
+                    <span class="navbar-user-avatar">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                    </span>
+                    <span class="navbar-user-name" th:text="${profesor.nombre}">Docente</span>
+                    <svg class="navbar-user-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div id="user-menu" class="dropdown-menu-panel dropdown-menu-right">
+                    <a th:href="@{/logout}" class="dropdown-menu-item">Cerrar Sesión</a>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
 
-<div class="container py-4">
-    <div th:if="${mensajeExito}" class="alert alert-success shadow-sm" role="alert">
-        <strong>¡Listo!</strong> <span th:text="${mensajeExito}"></span>
-    </div>
+<!-- ===== LAYOUT ===== -->
+<div class="dashboard-shell">
+    
+    <aside class="dashboard-sidebar">
+        <a th:href="@{/profesor/dashboard}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Mi panel
+        </a>
+        <a th:href="@{/profesor/reportes}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            Reportes
+        </a>
+        <div class="sidebar-divider"></div>
+        <a class="active" th:href="@{/profesor/registrar-notas}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="2" width="6" height="4" rx="1"></rect>
+                <path d="M9 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-4"></path>
+                <path d="M9 14l2 2 4-4"></path>
+            </svg>
+            Evaluaciones
+        </a>
+        <a href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            Clases
+        </a>
+        <a href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            Estudiantes
+        </a>
+        
+        <a href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <path d="M22 6L12 13 2 6"></path>
+            </svg>
+            Mensajes
+        </a>
+        <a href="#">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            Configuración
+        </a>
+    </aside>
 
-    <div class="dashboard-shell">
-        <aside class="dashboard-sidebar">
-            <h3>Docente</h3>
-            <a th:href="@{/profesor/dashboard}">Mi panel</a>
-            <a class="active" th:href="@{/profesor/registrar-notas}">Registrar notas</a>
-            <a th:href="@{/profesor/reportes}">Reportes</a>
-        </aside>
+    <main class="dashboard-main">
 
-        <main class="dashboard-main">
-            <div class="dashboard-topbar">
-                <div>
-                    <h1>Registrar calificaciones</h1>
-                    <p class="text-muted mb-0">Asigna las notas a tus estudiantes por tipo de evaluación.</p>
+        <div th:if="${mensajeExito}" class="alert alert-success" role="alert">
+            <div class="alert-content">
+                <div class="alert-icon success">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                </div>
+                <div class="alert-text">
+                    <strong>¡Listo!</strong>
+                    <span th:text="${mensajeExito}">La nota ha sido registrada correctamente.</span>
                 </div>
             </div>
+            <button class="alert-close" onclick="this.parentElement.remove()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
 
-            <div class="dashboard-card">
-                <div th:if="${mensajeError}" class="alert alert-danger shadow-sm" role="alert">
-                    <strong>Error:</strong> <span th:text="${mensajeError}"></span>
+        <div class="page-intro">
+            <h1>Registrar calificaciones</h1>
+            <p class="page-subtitle">Asigna las notas a tus estudiantes por tipo de evaluación.</p>
+            <div class="breadcrumb">
+                <a th:href="@{/profesor/dashboard}">Mi panel</a>
+                <span>›</span>
+                <a href="#">Registrar notas</a>
+                <span>›</span>
+                <span>Reportes</span>
+            </div>
+        </div>
+
+        <div th:if="${mensajeError}" class="alert alert-error" role="alert">
+            <div class="alert-content">
+                <div class="alert-icon error">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                    </svg>
                 </div>
-                <form th:action="@{/profesor/registrar-nota}" method="post" class="row g-3" onsubmit="return validarFormulario()">
-                    <div class="col-md-6">
+                <div class="alert-text">
+                    <strong>Error</strong>
+                    <span th:text="${mensajeError}">Por favor, completa todos los campos obligatorios correctamente.</span>
+                </div>
+            </div>
+            <button class="alert-close" onclick="this.parentElement.remove()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <section class="section-card">
+            <form th:action="@{/profesor/registrar-nota}" method="post" onsubmit="return validarFormulario()">
+                <div class="form-grid-2">
+                    <div class="form-group">
                         <label for="cursoId" class="form-label">Clase</label>
                         <select class="form-select" id="cursoId" name="cursoId" required>
                             <option selected disabled value="">Selecciona una clase</option>
                             <option th:each="curso : ${cursos}" th:value="${curso.id}" th:text="${curso.nombre}"></option>
                         </select>
                     </div>
-                    <div class="col-md-6">
+                    <div class="form-group">
                         <label for="tipoEvaluacion" class="form-label">Tipo de evaluación</label>
                         <select class="form-select" id="tipoEvaluacion" name="tipoEvaluacion" required>
                             <option selected disabled value="">Selecciona el tipo</option>
@@ -60,33 +191,69 @@
                             <option value="Nota 5">Nota 5</option>
                         </select>
                     </div>
-                    <div class="col-md-6">
+                    <div class="form-group">
                         <label for="valor" class="form-label">Calificación (0-20)</label>
-                        <input type="number" class="form-control" id="valor" name="valor" min="0" max="20" step="0.1">
+                        <div class="input-with-icon">
+                            <input type="number" class="form-input" id="valor" name="valor" min="0" max="20" step="0.1" placeholder="Ingresa la calificación (0-20)">
+                            <span class="input-icon">📊</span>
+                        </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="form-group">
                         <label class="form-label">No se presentó</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="nsCheck" onclick="toggleNs()">
-                            <label class="form-check-label" for="nsCheck">Marcar como Ns</label>
+                        <div class="checkbox-wrapper">
+                            <input type="checkbox" id="nsCheck" onclick="toggleNs()">
+                            <label for="nsCheck">Marcar como Ns</label>
+                            <span class="info-icon" title="Marca esta opción si el estudiante no se presentó a la evaluación">ⓘ</span>
                         </div>
                         <input type="hidden" id="ns" name="ns" value="false">
                     </div>
-                    <div class="col-12">
-                        <div class="d-flex justify-content-between">
-                            <a th:href="@{/profesor/dashboard}" class="btn btn-outline-secondary">Volver</a>
-                            <button type="submit" class="btn btn-primary">Guardar nota para todos</button>
-                        </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="limpiarFormulario()">Limpiar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        Guardar nota para todos
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section class="section-card" th:if="${not #lists.isEmpty(estudiantes)}">
+            <div class="section-card-header">
+                <div class="section-card-header-text">
+                    <div class="section-icon icon-blue">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
                     </div>
-                </form>
+                    <div>
+                        <h3>Estudiantes en tus clases</h3>
+                        <p class="section-card-desc">Vista previa de las notas que se guardarán.</p>
+                    </div>
+                </div>
+                <button class="btn btn-outline btn-sm">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Exportar
+                </button>
             </div>
 
-            <div class="dashboard-card mt-4" th:if="${not #lists.isEmpty(estudiantes)}">
-                <h3>Estudiantes en tus clases</h3>
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
+            <div class="custom-table-wrapper">
+                <table class="custom-table">
+                    <thead>
                         <tr>
+                            <th class="col-num">#</th>
                             <th>Estudiante</th>
                             <th>Matrícula</th>
                             <th>Nota 1</th>
@@ -95,25 +262,60 @@
                             <th>Nota 4</th>
                             <th>Nota 5</th>
                         </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="est : ${estudiantes}">
-                            <td th:text="${est.nombre}">Estudiante</td>
-                            <td th:text="${est.codigoMatricula}">Matrícula</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                    </thead>
+                    <tbody>
+                        <tr th:each="est, iterStat : ${estudiantes}">
+                            <td class="col-num" th:text="${iterStat.count}">1</td>
+                            <td>
+                                <div class="student-cell">
+                                    <div class="student-avatar">
+                                        <img th:src="@{/images/avatar-default.png}" alt="Avatar" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid'">
+                                        <span style="display:none;">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                                <circle cx="12" cy="7" r="4"></circle>
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <span th:text="${est.nombre}">Estudiante 1</span>
+                                </div>
+                            </td>
+                            <td th:text="${est.codigoMatricula}">A00123456</td>
+                            <td><input type="text" class="table-input" value="15" readonly></td>
+                            <td><input type="text" class="table-input" value="16" readonly></td>
+                            <td><input type="text" class="table-input" value="14" readonly></td>
+                            <td><input type="text" class="table-input" value="17" readonly></td>
+                            <td><input type="text" class="table-input" value="15" readonly></td>
                         </tr>
-                        </tbody>
-                    </table>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-footer">
+                <span class="table-info">Mostrando 1 a 2 de 2 estudiantes</span>
+                <div class="pagination">
+                    <button class="page-btn" disabled>‹</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">›</button>
                 </div>
             </div>
-        </main>
-    </div>
+        </section>
+
+    </main>
 </div>
+
 <script>
+    function toggleDropdown(id, event) {
+        event.stopPropagation();
+        const menu = document.getElementById(id);
+        const isOpen = menu.classList.contains('show');
+        document.querySelectorAll('.dropdown-menu-panel').forEach(m => m.classList.remove('show'));
+        if (!isOpen) menu.classList.add('show');
+    }
+    document.addEventListener('click', function () {
+        document.querySelectorAll('.dropdown-menu-panel').forEach(m => m.classList.remove('show'));
+    });
+
     function toggleNs() {
         var check = document.getElementById('nsCheck');
         var valor = document.getElementById('valor');
@@ -137,6 +339,16 @@
         }
         return true;
     }
+
+    function limpiarFormulario() {
+        document.getElementById('cursoId').selectedIndex = 0;
+        document.getElementById('tipoEvaluacion').selectedIndex = 0;
+        document.getElementById('valor').value = '';
+        document.getElementById('valor').disabled = false;
+        document.getElementById('nsCheck').checked = false;
+        document.getElementById('ns').value = 'false';
+    }
 </script>
+
 </body>
 </html>

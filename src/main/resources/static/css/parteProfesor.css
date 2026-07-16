@@ -1,0 +1,581 @@
+/* ===== Navbar superior nuevo (bell + avatar) ===== */
+.navbar-top {
+    background: #0f172a;
+    padding: 0.9rem 0;
+}
+
+.navbar-top-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+}
+
+.navbar-brand-new {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+
+.navbar-top-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.bell-btn {
+    background: transparent;
+    border: none;
+    color: #e2e8f0;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    padding: 0.4rem;
+}
+
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 0;
+}
+
+.navbar-user-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: white;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.navbar-user-name {
+    color: #e2e8f0;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.navbar-user-caret {
+    color: #94a3b8;
+}
+
+/* ===== Menús desplegables (campana / usuario) ===== */
+.dropdown-wrapper {
+    position: relative;
+}
+
+.dropdown-menu-panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+    min-width: 190px;
+    z-index: 50;
+    overflow: hidden;
+}
+
+.dropdown-menu-panel.show {
+    display: block;
+}
+
+.dropdown-menu-empty {
+    padding: 1rem;
+    color: #64748b;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.dropdown-menu-item {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: #ef4444;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.dropdown-menu-item:hover {
+    background: #fef2f2;
+}
+
+/* ===== Layout general ===== */
+.dashboard-shell {
+    display: flex;
+    min-height: calc(100vh - 68px);
+}
+
+.dashboard-sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: #16213e;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.dashboard-sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: #94a3b8;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.92rem;
+    padding: 0.65rem 0.85rem;
+    border-radius: 0.6rem;
+}
+
+.dashboard-sidebar a:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #e2e8f0;
+}
+
+.dashboard-sidebar a.active {
+    background: #2563eb;
+    color: white;
+}
+
+.sidebar-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 0.6rem 0.2rem;
+}
+
+.dashboard-main {
+    flex: 1;
+    padding: 2rem 2.25rem;
+    background: #f8fafc;
+}
+
+
+
+.page-intro h1 {
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.35rem;
+}
+
+.breadcrumb {
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+/* ===== Banner de bienvenida ===== */
+.welcome-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+    border-radius: 1.5rem;
+    padding: 2rem 2.25rem;
+    margin-bottom: 1.75rem;
+}
+
+.welcome-banner-text {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+}
+
+.welcome-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.welcome-banner h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.35rem;
+}
+
+.welcome-banner p {
+    color: #475569;
+    margin: 0;
+    max-width: 520px;
+}
+
+.welcome-illustration {
+    width: 220px;
+    flex-shrink: 0;
+}
+
+.welcome-illustration svg {
+    width: 100%;
+    height: auto;
+}
+
+@media (max-width: 900px) {
+    .welcome-banner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .welcome-illustration {
+        display: none;
+    }
+}
+
+/* ===== Fila de dos columnas: Clases + Resumen rápido ===== */
+.two-col-row {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 1.75rem;
+    margin-bottom: 1.75rem;
+}
+
+@media (max-width: 900px) {
+    .two-col-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== Tarjetas de sección ===== */
+.section-card {
+    background: white;
+    border-radius: 1.25rem;
+    padding: 1.75rem;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+    margin-bottom: 0;
+}
+
+.section-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.9rem;
+    margin-bottom: 1.1rem;
+}
+
+.section-card-header-text {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+}
+
+.section-card-desc {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.section-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 0.85rem;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.section-icon.icon-blue {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.section-icon.icon-violet {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+.section-card-header h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.15rem;
+}
+
+.chevron-hint {
+    color: #cbd5e1;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+/* ===== Resumen rápido (grid 2x2) ===== */
+.quick-summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.quick-summary-item {
+    border-radius: 1rem;
+    padding: 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.quick-summary-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 0.6rem;
+    display: grid;
+    place-items: center;
+}
+
+.quick-summary-number {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.quick-summary-label {
+    font-size: 0.82rem;
+    color: #64748b;
+}
+
+.item-violet {
+    background: #f5f3ff;
+}
+.item-violet .quick-summary-icon {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+.item-green {
+    background: #f0fdf4;
+}
+.item-green .quick-summary-icon {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+.item-orange {
+    background: #fff7ed;
+}
+.item-orange .quick-summary-icon {
+    background: #ffedd5;
+    color: #ea580c;
+}
+
+.item-blue {
+    background: #eff6ff;
+}
+.item-blue .quick-summary-icon {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+/* ===== Estado vacío en caja (aviso tipo alerta) ===== */
+.empty-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 1rem;
+    padding: 1.1rem 1.25rem;
+}
+
+.empty-note-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #fef3c7;
+    color: #d97706;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+}
+
+.empty-note strong {
+    display: block;
+    color: #92400e;
+    margin-bottom: 0.2rem;
+}
+
+.empty-note span {
+    color: #a16207;
+    font-size: 0.9rem;
+}
+
+/* ===== Estado vacío centrado (tabla sin datos) ===== */
+.empty-state {
+    text-align: center;
+    padding: 2.5rem 1rem 1.5rem;
+}
+
+.empty-state-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #94a3b8;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 1rem;
+}
+
+.empty-state strong {
+    display: block;
+    color: #334155;
+    font-size: 1.05rem;
+    margin-bottom: 0.35rem;
+}
+
+.empty-state span {
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+
+/*Reporte*/
+
+/* ===== Subtítulo debajo del título ===== */
+.page-subtitle {
+    color: #64748b;
+    font-size: 0.95rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+
+/* ===== Breadcrumb con link ===== */
+.breadcrumb a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb span {
+    color: #94a3b8;
+    margin: 0 0.3rem;
+}
+
+/* ===== Welcome banner ajustado (sin gradiente, fondo plano azul claro) ===== */
+.welcome-banner {
+    background: #eff6ff;
+    border: none;
+}
+
+.welcome-icon {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.welcome-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* ===== Tabla custom (sin Bootstrap) ===== */
+.custom-table-wrapper {
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.custom-table thead {
+    background: #1e293b;
+    color: white;
+}
+
+.custom-table th {
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.custom-table td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+}
+
+.custom-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.custom-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+/* ===== Badges custom ===== */
+.badge {
+    display: inline-block;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge-success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.badge-danger {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* ===== Estado vacío en tabla ===== */
+.empty-state-table {
+    text-align: center;
+    padding: 3rem 2rem;
+}
+
+.empty-state-table .empty-state-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #94a3b8;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 1rem;
+}
+
+.empty-state-table strong {
+    display: block;
+    color: #334155;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state-table span {
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+/* ===== fw-bold utility ===== */
+.fw-bold {
+    font-weight: 700;
+}
+
+
+
+
