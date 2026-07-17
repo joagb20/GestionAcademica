@@ -30,8 +30,15 @@ public class Curso {
     @Column(length = 1000)
     private String descripcion;
 
+    // Se mantiene por compatibilidad con tus Tests y DataInitializer
     @Column(length = 1000)
     private String estructuraEvaluacion;
+
+    // Nuevos campos: Porcentajes fijos para la evaluación
+    private Double porcentajePc1;
+    private Double porcentajePc2;
+    private Double porcentajeParcial;
+    private Double porcentajeFinal;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profesor_id")

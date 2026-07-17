@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Nuevo Estudiante</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .form-container { max-width: 400px; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="email"] { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <h2>Registrar Nuevo Estudiante</h2>
+    
+    <div class="form-container">
+        <!-- El objeto "estudiante" viene del AdminController -->
+        <form th:action="@{/admin/estudiantes}" th:object="${estudiante}" method="post">
+            <div class="form-group">
+                <label for="nombre">Nombre Completo:</label>
+                <input type="text" id="nombre" th:field="*{nombre}" required placeholder="Ej: Juan Pérez"/>
+            </div>
+            
+            <div class="form-group">
+                <label for="correo">Correo Electrónico:</label>
+                <input type="email" id="correo" th:field="*{correo}" required placeholder="juan@universidad.edu"/>
+            </div>
+
+            <button type="submit">Registrar Alumno</button>
+        </form>
+    </div>
+    
+    <br>
+    <a th:href="@{/admin/dashboard}">Volver al Dashboard</a>
+</body>
+</html>

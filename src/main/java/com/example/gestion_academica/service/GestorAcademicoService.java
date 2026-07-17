@@ -250,4 +250,43 @@ public class GestorAcademicoService {
         String[] partes = estudiante.getNombre().trim().split("\\s+");
         return partes.length == 0 ? "" : partes[partes.length - 1].toLowerCase();
     }
+    // 1. Método para buscar un curso específico
+    public Curso obtenerCursoPorId(Long id) {
+        return cursoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Curso no encontrado"));
+    }
+
+    // 2. Método para que la Universidad registre un estudiante
+    @Transactional
+    public Estudiante registrarEstudiante(Estudiante estudiante) {
+        estudiante.setRol("ROLE_ESTUDIANTE");
+        if(estudiante.getPassword() == null || estudiante.getPassword().isEmpty()){
+            estudiante.setPassword("estudiante123"); // Password por defecto
+        }
+        if(estudiante.getCodigoMatricula() == null || estudiante.getCodigoMatricula().isEmpty()){
+            estudiante.setCodigoMatricula("EST-" + System.currentTimeMillis());
+        }
+        return estudianteRepository.save(estudiante);
+    }
+
+    // 3. Nuevo método para crear curso con porcentajes exactos sin romper los tests antiguos
+    @Transactional
+    public Curso crearCursoConPorcentajes(String nombre, String codigo, String descripcion, Double pc1, Double pc2, Double parcial, Double fin, Long profesorId) {
+        Profesor profesor = profesorRepository.findById(profesorId)
+                .orElseThrow(() -> new IllegalArgumentException("Profesor no encontrado"));
+
+        Curso curso = new Curso();
+        curso.setNombre(nombre);
+        curso.setCodigo(codigo);
+        curso.setDescripcion(descripcion);
+        curso.setPorcentajePc1(pc1);
+        curso.setPorcentajePc2(pc2);
+        curso.setPorcentajeParcial(parcial);
+        curso.setPorcentajeFinal(fin);
+        // String por defecto para compatibilidad
+        curso.setEstructuraEvaluacion("PC1: " + pc1 + "%, PC2: " + pc2 + "%, Parcial: " + parcial + "%, Final: " + fin + "%");
+        curso.setProfesor(profesor);
+
+        return cursoRepository.save(curso);
+    }
 }

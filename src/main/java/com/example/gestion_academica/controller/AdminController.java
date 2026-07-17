@@ -1,5 +1,7 @@
 package com.example.gestion_academica.controller;
 
+import com.example.gestion_academica.model.Curso;
+import com.example.gestion_academica.model.Estudiante;
 import com.example.gestion_academica.model.Profesor;
 import com.example.gestion_academica.service.GestorAcademicoService;
 import lombok.RequiredArgsConstructor;
@@ -40,29 +42,48 @@ public class AdminController {
                 profesor.getPassword(),
                 profesor.getClase()
         );
-
         redirectAttributes.addFlashAttribute(
                 "mensajeExito",
                 "Profesor registrado correctamente. El correo de acceso generado es " + registrado.getCorreo()
         );
-
         return "redirect:/admin/dashboard";
     }
 
+    // --- NUEVAS RUTAS: CREAR ALUMNO ---
+    @GetMapping("/estudiantes/nuevo")
+    public String mostrarFormularioCrearEstudiante(Model model) {
+        model.addAttribute("estudiante", new Estudiante());
+        return "admin-crear-estudiante";
+    }
+
+    @PostMapping("/estudiantes")
+    public String guardarEstudiante(@ModelAttribute Estudiante estudiante, RedirectAttributes redirectAttrs) {
+        // Guardamos al estudiante a través del servicio
+        gestorAcademicoService.registrarEstudiante(estudiante);
+        redirectAttrs.addFlashAttribute("mensajeExito", "Alumno registrado en el sistema con éxito.");
+        return "redirect:/admin/dashboard";
+    }
+
+    // --- RUTAS MODIFICADAS: CREAR CURSO CON PORCENTAJES ---
     @GetMapping("/crear-curso")
     public String mostrarFormularioCurso(Model model) {
         model.addAttribute("profesores", gestorAcademicoService.listarProfesores());
+        model.addAttribute("curso", new Curso());
         return "admin-crear-curso";
     }
 
     @PostMapping("/crear-curso")
     public String crearCurso(@RequestParam String nombre,
                              @RequestParam String codigo,
-                             @RequestParam String descripcion,
-                             @RequestParam String estructuraEvaluacion,
+                             @RequestParam(required = false) String descripcion,
+                             @RequestParam Double porcentajePc1,
+                             @RequestParam Double porcentajePc2,
+                             @RequestParam Double porcentajeParcial,
+                             @RequestParam Double porcentajeFinal,
                              @RequestParam Long profesorId,
                              RedirectAttributes redirectAttributes) {
-        gestorAcademicoService.crearCurso(nombre, codigo, descripcion, estructuraEvaluacion, profesorId);
+                             
+        gestorAcademicoService.crearCursoConPorcentajes(nombre, codigo, descripcion, porcentajePc1, porcentajePc2, porcentajeParcial, porcentajeFinal, profesorId);
         redirectAttributes.addFlashAttribute("mensajeExito", "Clase creada correctamente y lista para recibir estudiantes.");
         return "redirect:/admin/dashboard";
     }
